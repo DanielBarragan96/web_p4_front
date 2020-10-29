@@ -1,32 +1,34 @@
 const HTTTPMethods = {
-    "put":"PUT",
-    "post":"POST",
-    "get":"GET",
-    "delete":"DELETE"
+    "put": "PUT",
+    "post": "POST",
+    "get": "GET",
+    "delete": "DELETE"
 }
-const APIURL = window.location.protocol+'//'+window.location.host+'/api';
+const APIURL = window.location.protocol + '//' + window.location.host + '/api';
 let TOKEN = getTokenValue('token');
 let PAGES = {
-    current : 1,
-    currentIndex:0,
+    current: 1,
+    currentIndex: 0,
 };
-let NAME_FILTER  = '';
+let NAME_FILTER = '';
+
 function getTokenValue(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
     }
     return "";
-  }
-function sendHTTPRequest(urlAPI,data,method,cbOK,cbError,){
+}
+
+function sendHTTPRequest(urlAPI, data, method, cbOK, cbError, ) {
     // 1. Crear XMLHttpRequest object
     let xhr = new XMLHttpRequest();
     // 2. Configurar:  PUT actualizar archivo
@@ -45,14 +47,17 @@ function sendHTTPRequest(urlAPI,data,method,cbOK,cbError,){
             cbError(xhr.status + ': ' + xhr.statusText);
         } else {
             // console.log(xhr.responseText); // Significa que fue exitoso
-            cbOK({status:xhr.status, data:xhr.responseText});
+            cbOK({
+                status: xhr.status,
+                data: xhr.responseText
+            });
         }
     };
 }
 
 
 
-const userToHTML=(user)=>{
+const userToHTML = (user) => {
     return `
     <div class="media col-8 mt-2">
         <div class="media-body">
@@ -72,41 +77,42 @@ const userToHTML=(user)=>{
         </div>
     </div>`
 }
-const userListToHTML=(list, id)=>{
-    if(id && list && document.getElementById(id)){
-        document.getElementById(id).innerHTML =  list.map(userToHTML).join('');
+const userListToHTML = (list, id) => {
+    if (id && list && document.getElementById(id)) {
+        document.getElementById(id).innerHTML = list.map(userToHTML).join('');
     }
 }
 
 
-function updateUser(ele){
+function updateUser(ele) {
     console.log('updateUser');
     //agrega el códgio necesario...
 }
-function deleteUser(ele){
+
+function deleteUser(ele) {
     console.log('deleteUser');
     console.log(ele.getAttribute('data-email'));
     //agrega el códgio necesario...
 
 }
 
-function getUsersPage(page,filter){
-    let nfilter = (filter)? `${filter}`:'';
-    let url = APIURL+"/users?page="+page+"&limit=3"+nfilter;
+function getUsersPage(page, filter) {
+    let nfilter = (filter) ? `${filter}` : '';
+    let url = APIURL + "/users?page=" + page + "&limit=3" + nfilter;
     //agrega el códgio necesario...
 }
-document.addEventListener('DOMContentLoaded',()=>{
-    getUsersPage(1,NAME_FILTER);
+document.addEventListener('DOMContentLoaded', () => {
+    getUsersPage(1, NAME_FILTER);
 
     let filterInput = document.getElementById('filterInput');
-    filterInput.addEventListener('change',(e)=>{
+    filterInput.addEventListener('change', (e) => {
         NAME_FILTER = `&name=${e.target.value}`;
-        getUsersPage(PAGES.current,NAME_FILTER);
+        getUsersPage(PAGES.current, NAME_FILTER);
     })
 
     $('#deleteFormModal').on('show.bs.modal', function (event) {
         // console.log(event.relatedTarget);
-         //agrega el códgio necesario...
+        //agrega el códgio necesario...
     });
 
     $('#updateFormModal').on('show.bs.modal', function (event) {
