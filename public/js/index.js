@@ -4,7 +4,7 @@ const HTTTPMethods = {
     "get": "GET",
     "delete": "DELETE"
 }
-const APIURL = window.location.protocol+'//'+window.location.host+'/api';
+const APIURL = window.location.protocol + '//' + window.location.host + '/api';
 let TOKEN = getTokenValue('token');
 
 function getTokenValue(cname) {
@@ -30,6 +30,7 @@ function setCookie(cname, cvalue, exdays) {
     var expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
+
 function sendHTTPRequest(urlAPI, data, method, cbOK, cbError, authToken) {
     // 1. Crear XMLHttpRequest object
     let xhr = new XMLHttpRequest();
@@ -59,6 +60,19 @@ function sendHTTPRequest(urlAPI, data, method, cbOK, cbError, authToken) {
 function login() {
     console.log('login...');
     //agrega tu codigo...
+    let email = document.getElementById("userInputLogin").value;
+    let pass = document.getElementById("passwordInputLogin").value;
+    let url = APIURL + 'login';
+
+    sendHTTPRequest(url, {
+        email: email,
+        password: pass
+    }, HTTTPMethods.post, (datos) => {
+        setCookie('token', datos.token, 2);
+        document.getElementById('loginResponseMSG').innerHTML('<div class="text-success">Bienvenido</div>');
+    }, (error) => {
+        document.getElementById('loginResponseMSG').innerHTML('<div class="text-danger">' + error + '</div>');
+    })
 }
 
 function createUser() {
