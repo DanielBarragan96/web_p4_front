@@ -95,6 +95,7 @@ let registerApellidosValid = false;
 let registerEmailValid = false;
 let password1Valid = false;
 let password2Valid = false;
+let samePassword = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     //agrega tu codigo de asignación de eventos...
@@ -105,12 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
         //agrega tu codigo...
     });
 
+    //validar que el usuario a registrar tenga los campos validos
     $('#createFormModal').on('keyup', function (event) {
-        // console.log(event.relatedTarget);
-        //agrega tu codigo...
         registerNombreValid = registerNombre.checkValidity();
         registerApellidosValid = registerApellidos.checkValidity();
-        createUserBtn.disabled = !(registerNombreValid && registerApellidosValid);
+        registerEmailValid = registerEmail.checkValidity();
+        password1Valid = password1.checkValidity();
+        password2Valid = password2.checkValidity();
+        samePassword = (password1.value === password2.value);
+        createUserBtn.disabled = !(registerNombreValid && registerApellidosValid && registerEmailValid && password1Valid && password2Valid && samePassword);
 
     });
     // document.getElementById("registerNombre").oninvalid = function () {}
