@@ -37,7 +37,7 @@ function sendHTTPRequest(urlAPI, data, method, cbOK, cbError, authToken) {
     // 2. Configurar:  PUT actualizar archivo
     xhr.open(method, urlAPI);
     // 3. indicar tipo de datos JSON
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('content-type', 'application/json');
     if (authToken)
         xhr.setRequestHeader('x-auth-user', authToken);
     // 4. Enviar solicitud al servidor
@@ -62,23 +62,19 @@ function login() {
     //agrega tu codigo...
     let email = document.getElementById("userInputLogin").value;
     let pass = document.getElementById("passwordInputLogin").value;
-    let url = APIURL + 'login';
+    let url = APIURL + '/login/';
 
-    sendHTTPRequest(url, {
+    sendHTTPRequest(url, JSON.stringify({
         email: email,
         password: pass
-    }, HTTTPMethods.post, (datos) => {
-        setCookie('token', datos.token, 2);
-        document.getElementById('loginResponseMSG').innerHTML('<div class="text-success">Bienvenido</div>');
+    }), HTTTPMethods.post, (res) => {
+        let token = res.data.substring(10, 26);
+        console.log(token);
+        setCookie('token', token, 2);
+        document.getElementById('loginResponseMSG').innerHTML = '<div class="text-success">Bienvenido</div>';
     }, (error) => {
-        document.getElementById('loginResponseMSG').innerHTML('<div class="text-danger">' + error + '</div>');
+        document.getElementById('loginResponseMSG').innerHTML = '<div class="text-danger">' + error + '</div>';
     })
-}
-
-function createUser() {
-    console.log('createUser');
-
-    //agrega tu codigo...
 }
 
 //get elementos del html
@@ -88,6 +84,9 @@ const registerApellidos = document.getElementById("registerApellidos");
 const registerEmail = document.getElementById("registerEmail");
 const password1 = document.getElementById("password1");
 const password2 = document.getElementById("password2");
+const registerDate = document.getElementById("registerDate");
+const registerSexo = document.getElementById("registerSexoM");
+const registerUrl = document.getElementById("registerUrl");
 
 let registerNombreValid = false;
 let registerApellidosValid = false;
@@ -95,6 +94,27 @@ let registerEmailValid = false;
 let password1Valid = false;
 let password2Valid = false;
 let samePassword = false;
+
+function createUser() {
+    console.log('createUser');
+
+
+    let url = APIURL + '/users/';
+    //agrega tu codigo...
+    sendHTTPRequest(url, JSON.stringify({
+        nombre: registerNombre.value,
+        apellidos: registerApellidos.value,
+        email: registerEmail.value,
+        password: password1.value,
+        fecha: registerDate.value,
+        sexo: registerSexo.value,
+        image: registerUrl.value
+    }), HTTTPMethods.post, (datos) => {
+        console.log(datos);
+    }, (error) => {
+        console.log(error);
+    }, document.cookie.split("=")[1]);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     //agrega tu codigo de asignación de eventos...
@@ -119,4 +139,14 @@ document.addEventListener('DOMContentLoaded', () => {
             password2Valid && samePassword
         );
     });
+
+    //al presionar el boton de guardar nuevo usuario
+    $('#createUserBtn').on('click', function (event) {
+        createUser();
+    });
+    //al presionar el boton de iniciar sesion
+    $('#loginBtn').on('click', function (event) {
+        login();
+    });
+
 });
