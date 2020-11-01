@@ -85,7 +85,7 @@ const registerEmail = document.getElementById("registerEmail");
 const password1 = document.getElementById("password1");
 const password2 = document.getElementById("password2");
 const registerDate = document.getElementById("registerDate");
-const registerSexo = document.getElementById("registerSexoM");
+const registerSexoM = document.getElementById("registerSexoM");
 const registerUrl = document.getElementById("registerUrl");
 
 let registerNombreValid = false;
@@ -96,9 +96,6 @@ let password2Valid = false;
 let samePassword = false;
 
 function createUser() {
-    console.log('createUser');
-
-
     let url = APIURL + '/users/';
     //agrega tu codigo...
     sendHTTPRequest(url, JSON.stringify({
@@ -107,10 +104,10 @@ function createUser() {
         email: registerEmail.value,
         password: password1.value,
         fecha: registerDate.value,
-        sexo: registerSexo.value,
+        sexo: registerSexoM.checked ? "M" : "H",
         image: registerUrl.value
     }), HTTTPMethods.post, (datos) => {
-        console.log(datos);
+        alert("Usuario registrado.");
     }, (error) => {
         console.log(error);
     }, document.cookie.split("=")[1]);
@@ -118,7 +115,6 @@ function createUser() {
 
 document.addEventListener('DOMContentLoaded', () => {
     //agrega tu codigo de asignación de eventos...
-
 
     $('#createFormModal').on('show.bs.modal', function (event) {
         // console.log(event.relatedTarget);
