@@ -81,9 +81,8 @@ function createUser() {
     //agrega tu codigo...
 }
 
-let index = 0;
+//get elementos del html
 const createUserBtn = document.getElementById("createUserBtn");
-
 const registerNombre = document.getElementById("registerNombre");
 const registerApellidos = document.getElementById("registerApellidos");
 const registerEmail = document.getElementById("registerEmail");
@@ -114,10 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
         password1Valid = password1.checkValidity();
         password2Valid = password2.checkValidity();
         samePassword = (password1.value === password2.value);
-        createUserBtn.disabled = !(registerNombreValid && registerApellidosValid && registerEmailValid && password1Valid && password2Valid && samePassword);
-
+        createUserBtn.disabled = !(
+            registerNombreValid && registerApellidosValid &&
+            registerEmailValid && password1Valid &&
+            password2Valid && samePassword
+        );
     });
-    // document.getElementById("registerNombre").oninvalid = function () {}
-
-
 });
