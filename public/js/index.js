@@ -79,9 +79,22 @@ function createUser() {
     console.log('createUser');
 
     //agrega tu codigo...
-
 }
 
+let index = 0;
+const createUserBtn = document.getElementById("createUserBtn");
+
+const registerNombre = document.getElementById("registerNombre");
+const registerApellidos = document.getElementById("registerApellidos");
+const registerEmail = document.getElementById("registerEmail");
+const password1 = document.getElementById("password1");
+const password2 = document.getElementById("password2");
+
+let registerNombreValid = false;
+let registerApellidosValid = false;
+let registerEmailValid = false;
+let password1Valid = false;
+let password2Valid = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     //agrega tu codigo de asignación de eventos...
@@ -90,8 +103,17 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#createFormModal').on('show.bs.modal', function (event) {
         // console.log(event.relatedTarget);
         //agrega tu codigo...
+    });
+
+    $('#createFormModal').on('keyup', function (event) {
+        // console.log(event.relatedTarget);
+        //agrega tu codigo...
+        registerNombreValid = registerNombre.checkValidity();
+        registerApellidosValid = registerApellidos.checkValidity();
+        createUserBtn.disabled = !(registerNombreValid && registerApellidosValid);
 
     });
+    // document.getElementById("registerNombre").oninvalid = function () {}
 
 
 });
