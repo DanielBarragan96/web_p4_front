@@ -41,7 +41,7 @@ router.get('/', (req, res) => {
         });
     }
     let population = users.length;
-    let totalPages = Math.round(population/limit);
+    let totalPages = Math.round(population / limit);
     if (req.query.page) {
         page = parseInt(req.query.page) * limit - limit;
         users = users.slice(page, page + limit);
@@ -57,35 +57,42 @@ router.get('/', (req, res) => {
             "nombre": val.nombre,
             "apellidos": val.apellidos,
             "email": val.email,
-            "uid": val.uid
+            "uid": val.uid,
+            "fecha": val.fecha,
+            "sexo": val.sexo,
+            "image": val.image
         }
     });
-    res.send({content:users,page:page,totalPages:totalPages});
+    res.send({
+        content: users,
+        page: page,
+        totalPages: totalPages
+    });
 
 });
 
-router.get('/:email',(req,res)=>{
+router.get('/:email', (req, res) => {
     let userCtrl = new UsersController();
     let users = userCtrl.getList();
-    if(req.params.email){
-        users = users.find(ele=> ele.email === req.params.email);
-        if(users){
+    if (req.params.email) {
+        users = users.find(ele => ele.email === req.params.email);
+        if (users) {
             res.send(users);
-        }else{
-            res.set('Content-Type','application/json');
+        } else {
+            res.set('Content-Type', 'application/json');
             res.status(204).send({});
         }
-    }else{
+    } else {
         res.status(400).send('missing params');
     }
 });
-router.put('/:email',(req,res)=>{
+router.put('/:email', (req, res) => {
     let b = req.body;
-    if (req.params.email && (b.nombre || b.apellidos || b.password  || b.fecha)) {
+    if (req.params.email && (b.nombre || b.apellidos || b.password || b.fecha)) {
         let u = usersCtrl.getUserByEmail(b.email);
         if (u) {
             b.uid = u.uid;
-            Object.assign(u,b);
+            Object.assign(u, b);
             res.status(200).send(usersCtrl.updateUser(u));
         } else {
             res.status(404).send('user does not exist');
@@ -95,11 +102,13 @@ router.put('/:email',(req,res)=>{
     }
 });
 
-router.delete('/:email',(req,res)=>{
+router.delete('/:email', (req, res) => {
     if (req.params.email) {
         let u = usersCtrl.getUserByEmail(req.params.email);
         if (u) {
-            res.status(200).send({"deleted":usersCtrl.deleteUser(u)});
+            res.status(200).send({
+                "deleted": usersCtrl.deleteUser(u)
+            });
         } else {
             res.status(404).send('user does not exist');
         }
