@@ -35,7 +35,7 @@ function sendHTTPRequest(urlAPI, data, method, cbOK, cbError, ) {
     xhr.open(method, urlAPI);
     // 3. indicar tipo de datos JSON
     xhr.setRequestHeader('Content-Type', 'application/json');
-    console.log(TOKEN);
+    // console.log(TOKEN);
     xhr.setRequestHeader('x-auth-user', TOKEN);
     // 4. Enviar solicitud al servidor
     xhr.send(data);
@@ -60,22 +60,28 @@ function sendHTTPRequest(urlAPI, data, method, cbOK, cbError, ) {
 const userToHTML = (user) => {
     return `
     <div class="media col-8 mt-2">
-        <div class="media-body">
-                <h4>${user.nombre} ${user.apellidos}</h4>
-                <p >Correo: ${user.email}</p>
+                <div class="media-left align-self-center mr-3">
+                    <img class="rounded-circle" src="${user.image}">
+                </div>
+                <div class="media-body">
+                        <h4> ${user.nombre} ${user.apellidos}</h4>
+                        <p >Correo: ${user.email}</p>
+                        <p >Fecha de nacimiento: ${user.fecha} </p>
+                        <p >Sexo: ${user.sexo} </p>
+                    </div>
+                <div class="media-right align-self-center">
+                    <div class="row">
+                        <div class="btn btn-primary mt-2" data-user='${JSON.stringify(user)}' > <a class="text-white" href="detalle.html?email=${user.email}"><i class="fas fa-search"></i></a></div>
+                    </div>
+                    <div class="row">
+                        <div class="btn btn-primary mt-2" data-user='${JSON.stringify(user)}' data-toggle="modal" data-target="#updateFormModal"><i class="fas fa-pencil-alt edit"></i></div>
+                    </div>
+                    <div class="row">
+                        <div class="btn btn-primary mt-2" data-toggle="modal" data-target="#deleteFormModal"  data-email="${user.email}"><i class="fas fa-trash-alt remove "></i></div>
+                    </div>
+                </div>
             </div>
-        <div class="media-right align-self-center">
-            <div class="row">
-                <div class="btn btn-primary" data-user='${JSON.stringify(user)}' > <a class="text-white" href="detalle.html?email=${user.email}"><i class="fas fa-search"></i></a></div>
-            </div>
-            <div class="row">
-                <div class="btn btn-primary "data-user='${JSON.stringify(user)}' data-toggle="modal" data-target="#updateFormModal"><i class="fas fa-pencil-alt edit"></i></div>
-            </div>
-            <div class="row">
-                <div class="btn btn-primary mt-2" data-toggle="modal" data-target="#deleteFormModal"  data-email="${user.email}"><i class="fas fa-trash-alt remove "></i></div>
-            </div>
-        </div>
-    </div>`
+    `
 }
 const userListToHTML = (list, id) => {
     if (id && list && document.getElementById(id)) {
@@ -96,18 +102,28 @@ function deleteUser(ele) {
 
 }
 
-function getUsersPage(page, filter) {
+function getUsersPage(page, pageLimit, filter) {
     let nfilter = (filter) ? `${filter}` : '';
-    let url = APIURL + "/users?page=" + page + "&limit=3" + nfilter;
+    let url = APIURL + "/users?page=" + page + `&limit=${pageLimit}` + nfilter;
     //agrega el códgio necesario...
+    sendHTTPRequest(url, '', HTTTPMethods.get, (res) => {
+        let data = JSON.parse(res.data);
+        let users = data.content;
+        userListToHTML(users, 'listaUsuarios');
+        // console.log(users);
+    }, (error) => {
+        console.log(error);
+    })
 }
+
 document.addEventListener('DOMContentLoaded', () => {
-    getUsersPage(1, NAME_FILTER);
+    let pageLimit = 3;
+    getUsersPage(PAGES.current, pageLimit, NAME_FILTER);
 
     let filterInput = document.getElementById('filterInput');
     filterInput.addEventListener('change', (e) => {
         NAME_FILTER = `&name=${e.target.value}`;
-        getUsersPage(PAGES.current, NAME_FILTER);
+        getUsersPage(PAGES.current, pageLimit, NAME_FILTER);
     })
 
     $('#deleteFormModal').on('show.bs.modal', function (event) {
