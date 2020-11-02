@@ -110,6 +110,7 @@ function createUser() {
         alert("Usuario registrado.");
     }, (error) => {
         console.log(error);
+        alert(`No se pudo registrar, favor de revisar los campos. ${error}`);
     }, document.cookie.split("=")[1]);
 }
 
