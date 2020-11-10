@@ -71,7 +71,7 @@ const userToHTML = (user) => {
                     </div>
                 <div class="media-right align-self-center">
                     <div class="row">
-                        <div class="btn btn-primary mt-2" data-user='${JSON.stringify(user)}' > <a class="text-white" href="detalle.html?email=${user.email}"><i class="fas fa-search"></i></a></div>
+                        <div class="btn btn-primary mt-2" data-user='${JSON.stringify(user)}' > <a class="text-white"><i class="fas fa-search"></i></a></div>
                     </div>
                     <div class="row">
                         <div class="btn btn-primary mt-2" data-user='${JSON.stringify(user)}' data-toggle="modal" data-target="#updateFormModal"><i class="fas fa-pencil-alt edit"></i></div>
@@ -125,11 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         NAME_FILTER = `&name=${e.target.value}`;
         getUsersPage(PAGES.current, pageLimit, NAME_FILTER);
     })
-
-    $('#deleteFormModal').on('show.bs.modal', function (event) {
-        // console.log(event.relatedTarget);
-        //agrega el códgio necesario...
-    });
 
     $('#updateFormModal').on('show.bs.modal', function (event) {
         // console.log(event.relatedTarget);
@@ -188,6 +183,23 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     });
 
-    $('#updateFormModal').on('hide.bs.modal', function (event) {});
+    $('#deleteFormModal').on('show.bs.modal', function (event) {
+        // console.log(event.relatedTarget);
+        //agrega el códgio necesario...
+        let email = event.relatedTarget.getAttribute('data-email');
+        $('#deleteUserBtn').attr("data-email", email);
+    });
+
+    $('#deleteUserBtn').on('click', function (event) {
+        var email = $('#deleteUserBtn').data('email');
+        let url = APIURL + "/users/" + email;
+        sendHTTPRequest(url, '', HTTTPMethods.delete, (res) => {
+            // console.log(res);
+            getUsersPage(PAGES.current, pageLimit, NAME_FILTER);
+        }, (error) => {
+            console.log(error);
+        })
+        console.log(url);
+    });
 
 });
