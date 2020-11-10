@@ -135,5 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // console.log(event.relatedTarget);
         let user = JSON.parse(event.relatedTarget.getAttribute('data-user'));
         //agrega el códgio necesario...
+        document.getElementById('updateName').value = user.nombre;
+        document.getElementById('updateApellidos').value = user.apellidos;
+        document.getElementById('updatePassword1').value = user.password;
+        document.getElementById('updatePassword2').value = user.password;
+        document.getElementById('updateDate').value = user.fecha;
+        document.getElementById('updateUrl').value = user.image;
     });
 });
