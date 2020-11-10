@@ -155,18 +155,33 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     });
 
+    $('#updateFormModal').on('keyup', function (event) {
+        let registerNombreValid = document.getElementById('updateName').checkValidity();
+        let registerApellidosValid = document.getElementById('updateApellidos').checkValidity();
+        document.getElementById('updateUserBtn').disabled = !(
+            registerNombreValid && registerApellidosValid
+        );
+    });
+
     $('#updateUserBtn').on('click', function (event) {
         var user = $('#updateUserBtn').data('user');
 
         user.nombre = document.getElementById('updateName').value;
         user.apellidos = document.getElementById('updateApellidos').value;
-        // user.password = document.getElementById('updatePassword1').value;
         user.fecha = document.getElementById('updateDate').value;
         user.image = document.getElementById('updateUrl').value;
 
+        let passwordValid = document.getElementById('updatePassword1').checkValidity();
+        if (document.getElementById('updatePassword1').value !== "" && passwordValid &&
+            document.getElementById('updatePassword1').value === document.getElementById('updatePassword2').value) {
+            user.password = document.getElementById('updatePassword1').value;
+        } else {
+            console.log("Password wasn't updated");
+        }
+
         let url = APIURL + "/users/" + user.email;
         sendHTTPRequest(url, JSON.stringify(user), HTTTPMethods.put, (res) => {
-            console.log(res);
+            // console.log(res);
             getUsersPage(PAGES.current, pageLimit, NAME_FILTER);
         }, (error) => {
             console.log(error);

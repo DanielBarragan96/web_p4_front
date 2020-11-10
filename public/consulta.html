@@ -222,6 +222,7 @@
                   <input
                     type="text"
                     name="nombre"
+                    pattern="[A-Za-z]+.{2,}"
                     id="updateName"
                     class="form-control"
                     placeholder="Nombre o nombres"
@@ -233,6 +234,7 @@
                   <input
                     type="text"
                     name="apellidos"
+                    pattern="[A-Za-z]+.{2,}"
                     id="updateApellidos"
                     class="form-control"
                     placeholder="Apellidos"
@@ -244,6 +246,7 @@
               <input
                 type="password"
                 name="password1"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
                 id="updatePassword1"
                 class="form-control mt-3"
                 placeholder="Contraseña"
@@ -253,6 +256,7 @@
               <input
                 type="password"
                 name="password2"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
                 id="updatePassword2"
                 class="form-control mt-3"
                 placeholder="Confirmar contraseña"
@@ -269,6 +273,7 @@
 
               <input
                 type="url"
+                pattern=".{4,}"
                 name="image"
                 id="updateUrl"
                 class="form-control mt-3"
@@ -290,6 +295,7 @@
               class="btn btn-success"
               id="updateUserBtn"
               data-dismiss="modal"
+              disabled
             >
               Actualizar
             </button>
