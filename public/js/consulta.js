@@ -133,13 +133,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $('#updateFormModal').on('show.bs.modal', function (event) {
         // console.log(event.relatedTarget);
-        let user = JSON.parse(event.relatedTarget.getAttribute('data-user'));
+        let selectedUser = JSON.parse(event.relatedTarget.getAttribute('data-user'));
+        let email = selectedUser.email;
+
+        let url = APIURL + "/users/" + email;
         //agrega el códgio necesario...
-        document.getElementById('updateName').value = user.nombre;
-        document.getElementById('updateApellidos').value = user.apellidos;
-        document.getElementById('updatePassword1').value = user.password;
-        document.getElementById('updatePassword2').value = user.password;
-        document.getElementById('updateDate').value = user.fecha;
-        document.getElementById('updateUrl').value = user.image;
+        sendHTTPRequest(url, '', HTTTPMethods.get, (res) => {
+            let user = JSON.parse(res.data);
+
+            //agrega el códgio necesario...
+            document.getElementById('updateName').value = user.nombre;
+            document.getElementById('updateApellidos').value = user.apellidos;
+            // document.getElementById('updatePassword1').value = user.password;
+            // document.getElementById('updatePassword2').value = user.password;
+            document.getElementById('updateDate').value = user.fecha;
+            document.getElementById('updateUrl').value = user.image;
+
+            $('#updateUserBtn').attr("data-user", JSON.stringify(user));
+        }, (error) => {
+            console.log(error);
+        })
     });
+
+    $('#updateUserBtn').on('click', function (event) {
+        var user = $('#updateUserBtn').data('user');
+
+        user.nombre = document.getElementById('updateName').value;
+        user.apellidos = document.getElementById('updateApellidos').value;
+        // user.password = document.getElementById('updatePassword1').value;
+        user.fecha = document.getElementById('updateDate').value;
+        user.image = document.getElementById('updateUrl').value;
+
+        let url = APIURL + "/users/" + user.email;
+        sendHTTPRequest(url, JSON.stringify(user), HTTTPMethods.put, (res) => {
+            console.log(res);
+            getUsersPage(PAGES.current, pageLimit, NAME_FILTER);
+        }, (error) => {
+            console.log(error);
+        })
+    });
+
+    $('#updateFormModal').on('hide.bs.modal', function (event) {});
+
 });
