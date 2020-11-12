@@ -1,40 +1,42 @@
 const HTTTPMethods = {
-    "put":"PUT",
-    "post":"POST",
-    "get":"GET",
-    "delete":"DELETE"
+    "put": "PUT",
+    "post": "POST",
+    "get": "GET",
+    "delete": "DELETE"
 }
-const APIURL = window.location.protocol+'//'+window.location.host+'/api';
+const APIURL = window.location.protocol + '//' + window.location.host + '/api';
 let TOKEN = getTokenValue('token');
 let PAGES = {
-    current : 1,
-    currentIndex:0,
-    list:[1,2,3],
-    limit:5
+    current: 1,
+    currentIndex: 0,
+    list: [1, 2, 3],
+    limit: 5
 };
+
 function getTokenValue(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
     }
     return "";
-  }
-function sendHTTPRequest(urlAPI,data,method,cbOK,cbError,){
+}
+
+function sendHTTPRequest(urlAPI, data, method, cbOK, cbError, ) {
     // 1. Crear XMLHttpRequest object
     let xhr = new XMLHttpRequest();
     // 2. Configurar:  PUT actualizar archivo
     xhr.open(method, urlAPI);
     // 3. indicar tipo de datos JSON
     xhr.setRequestHeader('Content-Type', 'application/json');
-    console.log(TOKEN);
+    // console.log(TOKEN);
     xhr.setRequestHeader('x-auth-user', TOKEN);
     // 4. Enviar solicitud al servidor
     xhr.send(data);
@@ -46,15 +48,18 @@ function sendHTTPRequest(urlAPI,data,method,cbOK,cbError,){
             cbError(xhr.status + ': ' + xhr.statusText);
         } else {
             // console.log(xhr.responseText); // Significa que fue exitoso
-            cbOK({status:xhr.status, data:xhr.responseText});
+            cbOK({
+                status: xhr.status,
+                data: xhr.responseText
+            });
         }
     };
 }
 
 
 
-const userToHTML=(user)=>{
-    let sexo = (user.sexo ==='H')?'Hombre':'Mujer';
+const userToHTML = (user) => {
+    let sexo = (user.sexo === 'H') ? 'Hombre' : 'Mujer';
     return `
     <div class="media col-8 mt-2">
         <div class="media-left align-self-center mr-3">
@@ -68,17 +73,28 @@ const userToHTML=(user)=>{
             </div>
     </div>`
 }
-const userListToHTML=(list, id)=>{
-    if(id && list && document.getElementById(id)){
+const userListToHTML = (list, id) => {
+    if (id && list && document.getElementById(id)) {
         console.log(list);
-        document.getElementById(id).innerHTML =  list.map(userToHTML).join(' ');
+        document.getElementById(id).innerHTML = list.map(userToHTML).join(' ');
     }
 }
 
-function getUser(){
+function getUser() {
     let urlParams = new URLSearchParams(window.location.search);
     //agrega codigo..
+    let email = window.location.href.split("?")[1];
+
+    let url = APIURL + "/users/" + email;
+    sendHTTPRequest(url, '', HTTTPMethods.get, (res) => {
+        let user = JSON.parse(res.data);
+        console.log(user);
+        // userListToHTML("lista", user);
+        document.getElementById("lista").innerHTML = userToHTML(user);
+    }, (error) => {
+        console.log(error);
+    })
 }
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded', () => {
     getUser();
 });
