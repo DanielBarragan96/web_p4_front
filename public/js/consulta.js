@@ -71,7 +71,7 @@ const userToHTML = (user) => {
                     </div>
                 <div class="media-right align-self-center">
                     <div class="row">
-                        <div class="btn btn-primary mt-2" data-user='${JSON.stringify(user)}' > <a class="text-white"><i class="fas fa-search"></i></a></div>
+                        <a class="btn btn-primary mt-2 text-white" href="detalle.html?${user.email}"><i class="fas fa-search"></i></a>
                     </div>
                     <div class="row">
                         <div class="btn btn-primary mt-2" data-user='${JSON.stringify(user)}' data-toggle="modal" data-target="#updateFormModal"><i class="fas fa-pencil-alt edit"></i></div>
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     filterInput.addEventListener('change', (e) => {
         NAME_FILTER = `&name=${e.target.value}`;
         getUsersPage(PAGES.current, pageLimit, NAME_FILTER);
-    })
+    });
 
     $('#updateFormModal').on('show.bs.modal', function (event) {
         // console.log(event.relatedTarget);
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             $('#updateUserBtn').attr("data-user", JSON.stringify(user));
         }, (error) => {
             console.log(error);
-        })
+        });
     });
 
     $('#updateFormModal').on('keyup', function (event) {
