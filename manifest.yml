@@ -1,12 +1,12 @@
 applications:
-- instances: 1
-  timeout: 180
-  name: hjgm-practica4
-  buildpack: sdk-for-nodejs
-  command: npm start
-  disk_quota: 1G
-  memory: 128MB
-  domain: mybluemix.net
-  host: hjgm-practica4
-  env:
-    OPTIMIZE_MEMORY: true
+  - instances: 1
+    timeout: 180
+    name: dba-practica4
+    buildpack: sdk-for-nodejs
+    command: node server.js
+    disk_quota: 1G
+    memory: 128MB
+    domain: mybluemix.net
+    host: dba-practica4
+    env:
+      OPTIMIZE_MEMORY: true
