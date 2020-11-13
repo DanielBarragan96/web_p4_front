@@ -11,7 +11,7 @@ let PAGES = {
     currentIndex: 0,
 };
 let NAME_FILTER = '';
-let pageLimit = 2;
+let pageLimit = 3;
 let totalPages;
 
 function getTokenValue(cname) {
@@ -105,7 +105,7 @@ function deleteUser(ele) {
 }
 
 function getUsersPage(page, pageLimit, filter) {
-    let nfilter = (filter) ? `${filter}` : '';
+    let nfilter = (filter) ? `&name=${filter}` : '';
     let url = APIURL + "/users?page=" + page + `&limit=${pageLimit}` + nfilter;
     //agrega el códgio necesario...
     sendHTTPRequest(url, '', HTTTPMethods.get, (res) => {
@@ -113,6 +113,7 @@ function getUsersPage(page, pageLimit, filter) {
         let users = data.content;
         totalPages = data.totalPages;
         userListToHTML(users, 'listaUsuarios');
+        //update pages buttons
         document.getElementById('pagesList').innerHTML = getPagesBtns();
         // console.log(users);
     }, (error) => {
@@ -234,6 +235,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(error);
         })
         console.log(url);
+    });
+
+    $('#filterInput').on('keyup', function (event) {
+        NAME_FILTER = document.getElementById('filterInput').value;
+        getUsersPage(PAGES.current, pageLimit, NAME_FILTER);
     });
 
 });
