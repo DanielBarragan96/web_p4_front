@@ -11,6 +11,8 @@ let PAGES = {
     currentIndex: 0,
 };
 let NAME_FILTER = '';
+let pageLimit = 2;
+let totalPages;
 
 function getTokenValue(cname) {
     var name = cname + "=";
@@ -109,15 +111,43 @@ function getUsersPage(page, pageLimit, filter) {
     sendHTTPRequest(url, '', HTTTPMethods.get, (res) => {
         let data = JSON.parse(res.data);
         let users = data.content;
+        totalPages = data.totalPages;
         userListToHTML(users, 'listaUsuarios');
+        document.getElementById('pagesList').innerHTML = getPagesBtns();
         // console.log(users);
     }, (error) => {
         console.log(error);
     })
 }
 
+const getPagesBtns = () => {
+    // let first_page = (PAGES.current > 1) ? PAGES.current - 1 : PAGES.current;
+    // let second_page = first_page + 1;
+    // let third_page = first_page + 2;
+    let first_page = PAGES.current;
+    if (first_page > 1) {
+        if ((first_page + 1) <= totalPages) {
+            return `<li class="page-item"><a class="page-link" href="#">Previous</a></li>` +
+                `<li class="page-item"><a class="page-link" href="#">${first_page - 1}</a></li>` +
+                `<li class="page-item active"><a class="page-link" href="#">${first_page}</a></li>` +
+                `<li class="page-item"><a class="page-link" href="#">${first_page + 1}</a></li>` +
+                `<li class="page-item"><a class="page-link" href="#">Next</a></li>`;
+        } else {
+            return `<li class="page-item"><a class="page-link" href="#">Previous</a></li>` +
+                `<li class="page-item"><a class="page-link" href="#">${first_page - 1}</a></li>` +
+                `<li class="page-item active"><a class="page-link" href="#">${first_page}</a></li>` +
+                `<li class="page-item disabled"><a class="page-link">Next</a></li>`;
+        }
+    } else {
+        return `<li class="page-item disabled"><a class="page-link">Previous</a></li>` +
+            `<li class="page-item active"><a class="page-link" href="#">${first_page}</a></li>` +
+            `<li class="page-item"><a class="page-link" href="#">${first_page + 1}</a></li>` +
+            `<li class="page-item"><a class="page-link" href="#">${first_page + 2}</a></li>` +
+            `<li class="page-item"><a class="page-link" href="#">Next</a></li>`;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    let pageLimit = 3;
     getUsersPage(PAGES.current, pageLimit, NAME_FILTER);
 
     let filterInput = document.getElementById('filterInput');
