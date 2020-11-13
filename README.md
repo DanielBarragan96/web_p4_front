@@ -30,3 +30,7 @@ Para correr el servidor es necesario primero instalar las dependencias:
 9. Es posible realizar el paginado (correctamente, mostrando el número de páginas correcto y activando desactivando botones prev y next) y poder realizar búsquedas por nombre.
 
 10. El proyecto se subió a la plataforma de IBM Cloud público de modo que es accesible y funcional desde internet.
+
+El video se encuentra en este [link](https://youtu.be/wZrgbtafeeI)
+
+La página está en este [link](http://dba-practica4.mybluemix.net/index.html)
