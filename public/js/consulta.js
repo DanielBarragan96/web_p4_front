@@ -120,30 +120,34 @@ function getUsersPage(page, pageLimit, filter) {
     })
 }
 
+function updatePage(newPage) {
+    if (newPage != PAGES.current) {
+        PAGES.current = newPage;
+        getUsersPage(PAGES.current, pageLimit, NAME_FILTER);
+    }
+}
+
 const getPagesBtns = () => {
-    // let first_page = (PAGES.current > 1) ? PAGES.current - 1 : PAGES.current;
-    // let second_page = first_page + 1;
-    // let third_page = first_page + 2;
     let first_page = PAGES.current;
     if (first_page > 1) {
         if ((first_page + 1) <= totalPages) {
-            return `<li class="page-item"><a class="page-link" href="#">Previous</a></li>` +
-                `<li class="page-item"><a class="page-link" href="#">${first_page - 1}</a></li>` +
-                `<li class="page-item active"><a class="page-link" href="#">${first_page}</a></li>` +
-                `<li class="page-item"><a class="page-link" href="#">${first_page + 1}</a></li>` +
-                `<li class="page-item"><a class="page-link" href="#">Next</a></li>`;
+            return `<li class="page-item"><a class="page-link" href="javascript:updatePage(${first_page - 1})">Previous</a></li>` +
+                `<li class="page-item"><a class="page-link" href="javascript:updatePage(${first_page - 1})">${first_page - 1}</a></li>` +
+                `<li class="page-item active"><a class="page-link" href="javascript:updatePage(${first_page})">${first_page}</a></li>` +
+                `<li class="page-item"><a class="page-link" href="javascript:updatePage(${first_page + 1})">${first_page + 1}</a></li>` +
+                `<li class="page-item"><a class="page-link" href="javascript:updatePage(${first_page + 1})">Next</a></li>`;
         } else {
-            return `<li class="page-item"><a class="page-link" href="#">Previous</a></li>` +
-                `<li class="page-item"><a class="page-link" href="#">${first_page - 1}</a></li>` +
-                `<li class="page-item active"><a class="page-link" href="#">${first_page}</a></li>` +
+            return `<li class="page-item"><a class="page-link" href="javascript:updatePage(${first_page - 1})">Previous</a></li>` +
+                `<li class="page-item"><a class="page-link" href="javascript:updatePage(${first_page - 1})">${first_page - 1}</a></li>` +
+                `<li class="page-item active"><a class="page-link" href="javascript:updatePage(${first_page})">${first_page}</a></li>` +
                 `<li class="page-item disabled"><a class="page-link">Next</a></li>`;
         }
     } else {
         return `<li class="page-item disabled"><a class="page-link">Previous</a></li>` +
-            `<li class="page-item active"><a class="page-link" href="#">${first_page}</a></li>` +
-            `<li class="page-item"><a class="page-link" href="#">${first_page + 1}</a></li>` +
-            `<li class="page-item"><a class="page-link" href="#">${first_page + 2}</a></li>` +
-            `<li class="page-item"><a class="page-link" href="#">Next</a></li>`;
+            `<li class="page-item active"><a class="page-link" href="javascript:updatePage(${first_page})">${first_page}</a></li>` +
+            `<li class="page-item"><a class="page-link" href="javascript:updatePage(${first_page + 1})">${first_page + 1}</a></li>` +
+            `<li class="page-item"><a class="page-link" href="javascript:updatePage(${first_page + 2})">${first_page + 2}</a></li>` +
+            `<li class="page-item"><a class="page-link" href="javascript:updatePage(${first_page + 1})">Next</a></li>`;
     }
 }
 
